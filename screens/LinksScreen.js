@@ -11,19 +11,29 @@ export default class LinksScreen extends React.Component {
   };
 
   componentDidMount() {
-    this.ws = new WebSocket("ws://gifted-chat-websocket.herokuapp.com");
+    this.ws = new WebSocket("ws://192.168.86.28:5001");
 
     this.ws.onmessage = e => {
       const message = JSON.parse(e.data);
 
-      this.setState({
-        messages: GiftedChat.append(this.state.messages, message)
-      });
+      this.setState(
+        {
+          messages: GiftedChat.append(this.state.messages, message)
+        },
+        () => console.log(this.state)
+      );
     };
   }
 
   onSend(messages = []) {
-    this.ws.send(JSON.stringify({ text: messages[0].text, name: "audrey" }));
+    this.ws.send(
+      JSON.stringify({
+        text: messages[0].text,
+        name: "poire"
+        // senderId: "Alexis",
+        // receiverId: "Audrey"
+      })
+    ); //ici j envoie le sender-id ET le receiver_id
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages)
     }));
@@ -36,7 +46,7 @@ export default class LinksScreen extends React.Component {
         onSend={messages => this.onSend(messages)}
         isLoadingEarlier={true}
         user={{
-          _id: 1,
+          _id: "5c0928843015e1a54d313ade",
           name: "audrey"
         }}
       />
