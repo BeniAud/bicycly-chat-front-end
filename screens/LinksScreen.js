@@ -29,9 +29,8 @@ export default class LinksScreen extends React.Component {
     this.ws.send(
       JSON.stringify({
         text: messages[0].text,
-        name: "poire"
-        // senderId: "Alexis",
-        // receiverId: "Audrey"
+        _id: "5c095ed554f4241f70ad49a7", //audrey
+        user: { _id: "5c095ed054f4241f70ad49a6" } //alexis
       })
     ); //ici j envoie le sender-id ET le receiver_id
     this.setState(previousState => ({
@@ -46,7 +45,7 @@ export default class LinksScreen extends React.Component {
         onSend={messages => this.onSend(messages)}
         isLoadingEarlier={true}
         user={{
-          _id: "5c0928843015e1a54d313ade",
+          _id: "5c095ed554f4241f70ad49a7",
           name: "audrey"
         }}
       />
