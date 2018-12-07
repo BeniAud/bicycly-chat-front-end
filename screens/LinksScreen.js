@@ -2,6 +2,7 @@ import React from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { ExpoLinksView } from "@expo/samples";
 import { GiftedChat } from "react-native-gifted-chat";
+import axios from "axios";
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
     title: "Links"
@@ -11,6 +12,14 @@ export default class LinksScreen extends React.Component {
   };
 
   componentDidMount() {
+
+    axios.get("http://localhost:5001/historyMessages").then(response => {
+      console.log("response.data.list", response.data.list);
+      this.setState({
+        messages: response.data.list
+      });
+    });
+
     this.ws = new WebSocket("ws://192.168.86.28:5001");
 
     this.ws.onmessage = e => {
@@ -29,13 +38,20 @@ export default class LinksScreen extends React.Component {
     this.ws.send(
       JSON.stringify({
         text: messages[0].text,
-        _id: "5c095ed554f4241f70ad49a7", //audrey
-        user: { _id: "5c095ed054f4241f70ad49a6" } //alexis
+
+        _id: "5c0a54c0295c351171deae9e", // audrey DESTINATAIRE(LIBRE)
+        user: {
+          _id: "5c0a54c7295c351171deae9f" // alexis EXPEDITEUR
+        }
       })
-    ); //ici j envoie le sender-id ET le receiver_id
-    this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages)
-    }));
+    ); // Ici j'envoie aussi le sender_id et le receiver_id
+    this.setState(
+      previousState => ({
+        messages: GiftedChat.append(previousState.messages, messages)
+      }),
+      () => console.log(this.state)
+    );
+
   }
 
   render() {
@@ -45,8 +61,10 @@ export default class LinksScreen extends React.Component {
         onSend={messages => this.onSend(messages)}
         isLoadingEarlier={true}
         user={{
-          _id: "5c095ed554f4241f70ad49a7",
-          name: "audrey"
+
+          _id: "5c0a54c7295c351171deae9f",
+          name: "Alexis"
+
         }}
       />
     );
